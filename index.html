@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Women's Day</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+overflow:hidden;
+background:#ffd6e7;
+font-family:'Dancing Script',cursive;
+transition:background 2s;
+}
+
+.page{
+position:absolute;
+width:100%;
+height:100%;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+}
+
+.active{
+display:flex;
+}
+
+button{
+padding:15px 30px;
+font-size:20px;
+border:none;
+border-radius:30px;
+background:#ff6fa5;
+color:white;
+cursor:pointer;
+margin-top:20px;
+}
+
+#text{
+font-size:40px;
+color:#d6336c;
+}
+
+.flower{
+position:absolute;
+font-size:40px;
+cursor:pointer;
+}
+
+#gift{
+font-size:90px;
+cursor:pointer;
+}
+
+.firework{
+position:absolute;
+width:6px;
+height:6px;
+border-radius:50%;
+animation:explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+to{
+transform:translate(var(--x),var(--y));
+opacity:0;
+}
+}
+
+</style>
+</head>
+
+<body>
+<audio id="music" autoplay loop muted>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+<!-- Trang 1 -->
+<div class="page active" id="page1">
+<div id="text"></div>
+<button onclick="nextPage(2)">💌 Bắt đầu</button>
+</div>
+
+<!-- Trang 2 -->
+<div class="page" id="page2">
+<h1>Một điều nhỏ muốn gửi tới bạn...</h1>
+<button onclick="nextPage(3)">Tiếp tục</button>
+</div>
+
+<!-- Trang 3 -->
+<div class="page" id="page3">
+<h1>📜 Mở thiệp</h1>
+<div id="letter"></div>
+<button onclick="nextPage(4)">Đi tiếp</button>
+</div>
+
+<!-- Trang 4 -->
+<div class="page" id="page4">
+<h1>🌸 Click vào các bông hoa</h1>
+<button onclick="nextPage(5)">Tiếp</button>
+</div>
+
+<!-- Trang 5 -->
+<div class="page" id="page5">
+<h1>Bắt trái tim 💖</h1>
+<h2 id="score">0</h2>
+</div>
+
+<!-- Trang 6 -->
+<div class="page" id="page6">
+<div id="gift">📦</div>
+<h2>Click để mở quà</h2>
+</div>
+
+<!-- Trang 7 -->
+<div class="page" id="page7">
+<h1 style="font-family:'Pacifico';font-size:60px;color:#ff4d88">
+Happy Women's Day 💖
+</h1>
+</div>
+
+<script>
+
+let message="Một món quà nhỏ dành cho bạn..."
+let i=0
+
+function type(){
+if(i<message.length){
+document.getElementById("text").innerHTML+=message[i]
+i++
+setTimeout(type,80)
+}
+}
+type()
+
+function nextPage(n){
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
+document.getElementById("page"+n).classList.add("active")
+
+if(n==2)startHearts()
+if(n==3)writeLetter()
+if(n==4)createFlowers()
+if(n==5)startGame()
+
+if(n==7){
+document.body.style.background="#000"
+startFireworks()
+startFlowers()
+startFinalHearts()
+}
+
+}
+
+function startHearts(){
+
+setInterval(()=>{
+let h=document.createElement("div")
+h.innerHTML="💖"
+h.style.position="absolute"
+h.style.left=Math.random()*100+"vw"
+h.style.top=Math.random()*100+"vh"
+h.style.fontSize="25px"
+
+document.body.appendChild(h)
+
+setTimeout(()=>h.remove(),4000)
+
+},300)
+
+}
+
+function writeLetter(){
+
+let text="Chúc bạn luôn vui vẻ, xinh đẹp và hạnh phúc mỗi ngày 💖"
+let j=0
+let box=document.getElementById("letter")
+
+let interval=setInterval(()=>{
+
+box.innerHTML+=text[j]
+j++
+
+if(j>=text.length)clearInterval(interval)
+
+},80)
+
+}
+
+function createFlowers(){
+
+let wishes=[
+
+"Chúc bạn luôn xinh đẹp 🌸",
+"Chúc bạn luôn vui vẻ 💖",
+"Chúc bạn nhiều may mắn ✨",
+"Chúc bạn luôn rạng rỡ 🌷",
+"Chúc bạn luôn hạnh phúc 💕",
+"Chúc bạn luôn thành công 🌟",
+"Chúc bạn luôn mỉm cười 😊",
+"Chúc bạn một ngày thật đẹp 🌹"
+
+]
+
+for(let i=0;i<15;i++){
+
+let f=document.createElement("div")
+f.className="flower"
+f.innerHTML="🌸"
+
+f.style.left=Math.random()*90+"vw"
+f.style.top=Math.random()*90+"vh"
+
+f.onclick=function(){
+
+this.innerHTML="🌹"
+
+let msg=document.createElement("div")
+
+let randomWish=wishes[Math.floor(Math.random()*wishes.length)]
+
+msg.innerHTML=randomWish
+msg.style.position="absolute"
+msg.style.left=this.style.left
+msg.style.top=this.style.top
+msg.style.color="#d6336c"
+
+document.body.appendChild(msg)
+
+}
+
+document.body.appendChild(f)
+
+}
+
+}
+
+function startGame(){
+
+let score=0
+let need=3
+
+document.getElementById("score").innerHTML="0 / "+need
+
+let game=setInterval(()=>{
+
+let h=document.createElement("div")
+
+h.innerHTML="💖"
+h.style.position="absolute"
+h.style.left=Math.random()*90+"vw"
+h.style.top="-40px"
+h.style.fontSize="35px"
+h.style.cursor="pointer"
+
+document.body.appendChild(h)
+
+let pos=-40
+
+let fall=setInterval(()=>{
+pos+=4
+h.style.top=pos+"px"
+
+if(pos>window.innerHeight){
+h.remove()
+clearInterval(fall)
+}
+
+},30)
+
+h.onclick=function(){
+
+score++
+
+document.getElementById("score").innerHTML=score+" / "+need
+
+h.remove()
+clearInterval(fall)
+
+if(score>=need){
+
+clearInterval(game)
+
+setTimeout(()=>{
+nextPage(6)
+},500)
+
+}
+
+}
+
+},800)
+
+}
+
+document.getElementById("gift").onclick=function(){
+
+this.innerHTML="💖"
+
+setTimeout(()=>{
+nextPage(7)
+},1500)
+
+}
+
+function startFireworks(){
+
+let colors=["red","yellow","cyan","orange","pink","lime","violet","white"]
+
+setInterval(()=>{
+
+let x=window.innerWidth*Math.random()
+let y=window.innerHeight*Math.random()
+
+for(let i=0;i<25;i++){
+
+let f=document.createElement("div")
+f.className="firework"
+
+f.style.left=x+"px"
+f.style.top=y+"px"
+
+f.style.background=colors[Math.floor(Math.random()*colors.length)]
+
+f.style.setProperty("--x",(Math.random()*200-100)+"px")
+f.style.setProperty("--y",(Math.random()*200-100)+"px")
+
+document.body.appendChild(f)
+
+setTimeout(()=>f.remove(),1000)
+
+}
+
+},700)
+
+}
+
+function startFlowers(){
+
+setInterval(()=>{
+
+let f=document.createElement("div")
+
+f.innerHTML="🌸"
+f.style.position="absolute"
+f.style.left=Math.random()*100+"vw"
+f.style.top="-20px"
+f.style.fontSize="25px"
+
+document.body.appendChild(f)
+
+let fall=setInterval(()=>{
+f.style.top=(f.offsetTop+2)+"px"
+},20)
+
+setTimeout(()=>{
+f.remove()
+clearInterval(fall)
+},8000)
+
+},300)
+
+}
+
+function startFinalHearts(){
+
+setInterval(()=>{
+
+let h=document.createElement("div")
+
+h.innerHTML="💖"
+h.style.position="absolute"
+h.style.left=Math.random()*100+"vw"
+h.style.bottom="-20px"
+h.style.fontSize="25px"
+
+document.body.appendChild(h)
+
+let pos=-20
+
+let fly=setInterval(()=>{
+pos+=3
+h.style.bottom=pos+"px"
+},30)
+
+setTimeout(()=>{
+h.remove()
+clearInterval(fly)
+},6000)
+
+},400)
+
+}
+document.addEventListener("touchstart",function(){
+
+let music=document.getElementById("music")
+
+music.muted=false
+music.play()
+
+},{once:true})
+</script>
+
+</body>
+
+</html>
